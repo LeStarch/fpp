@@ -12,8 +12,8 @@ if [ ! -d "${graal_bin}" ]
 then
     graal_bin="${graal_dir}/Contents/Home/bin"
 fi
+export PATH="${graal_bin}:${PATH}"
+export GRAALVM_JAVA_HOME="${graal_dir}"
 # Install native image
-${graal_bin}/gu install native-image 1>&2
+${graal_bin}/gu install native-image
 
-# Return Graal home directory
-echo "$(dirname ${graal_bin})"
