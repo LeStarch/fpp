@@ -17,7 +17,6 @@ then
   echo "release: environment variable GRAALVM_JAVA_HOME is not set" 1>&2
   exit 1
 fi
-export PATH="$GRAALVM_JAVA_HOME/bin:${PATH}"
 directory=`dirname $0`
 native_bin="$directory/native-fpp-`uname`-`uname -m`"
 native_image="$GRAALVM_JAVA_HOME/bin/native-image"
@@ -25,7 +24,15 @@ native_image="$GRAALVM_JAVA_HOME/bin/native-image"
 mkdir -p "$native_bin"
 
 # Install jar files here
-$directory/install
+$directory/install-trace
+# Test a run before running test
+$directory/bin/fpp-locate-defs tools/fpp-locate-defs/test/defs/defs-1.fpp tools/fpp-locate-defs/test/defs/defs-2.fpp 1>/dev/null
+if [ $? -ne 0 ]
+then
+    echo "[ERROR] Failed to run tracable JAR"
+    exit 1
+fi
+$directory/test
 
 cc --version
 # Convert jar files to binaries
