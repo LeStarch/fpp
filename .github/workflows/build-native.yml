@@ -35,5 +35,6 @@ jobs:
       env:
         TWINE_PASSWORD: ${{ secrets.TESTPYPI_CREDENTIAL }}
       with:
+        package: "fprime-fpp"
         steps: "sdist"
 
