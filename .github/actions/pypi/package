@@ -1,0 +1,43 @@
+#!/bin/bash
+# Read repo from first argument
+repo="$1"
+shift
+
+# Remaining arguments are build steps
+python3 setup.py "$@"
+if (( $? != 0 ))
+then
+    echo "[ERROR] Failed to build package with: $@"
+    exit 1
+fi
+
+# Check the repo before uploading
+twine check dist/*
+if (( $? != 0 ))
+then
+    echo "[ERROR] Failed to check package"
+    exit 2
+fi
+
+# Upload the package to the given repo
+twine upload -r "${repo}" -u "__token__" dist/*
+if (( $? != 0 ))
+then
+    echo "[ERROR] Failed to upload package to: ${repo}"
+    exit 3
+fi
+
+# Prepare for installation of specific package version
+version="$(git describe --tag --always)"
+args=""
+if [[ "${repo}" == "testpypi" ]]
+then
+    args="--index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/"
+fi
+
+pip install ${args}
+if (( $? != 0 ))
+then
+    echo "[ERROR] Failed to install package with: ${args}"
+    exit 4
+fi
