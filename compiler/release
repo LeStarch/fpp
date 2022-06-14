@@ -25,7 +25,8 @@ native_image="$GRAALVM_JAVA_HOME/bin/native-image"
 mkdir -p "$native_bin"
 
 # Install jar files here
-$directory/install
+$directory/install-trace
+$directory/test
 
 cc --version
 # Convert jar files to binaries
