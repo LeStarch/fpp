@@ -19,6 +19,7 @@ lazy val dependencies = Seq(
   "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1",
   "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
   "org.scalatest" %% "scalatest" % "3.2.12" % "test",
+  "com.google.code.gson" % "gson" % "2.10"
 )
 
 lazy val root = (project in file("."))
@@ -81,6 +82,11 @@ lazy val fpp_locate_uses = (project in file("tools/fpp-locate-uses"))
   .enablePlugins(AssemblyPlugin)
 
 lazy val fpp_to_cpp = (project in file("tools/fpp-to-cpp"))
+  .settings(settings)
+  .dependsOn(lib)
+  .enablePlugins(AssemblyPlugin)
+
+lazy val fpp_to_json = (project in file("tools/fpp-to-json"))
   .settings(settings)
   .dependsOn(lib)
   .enablePlugins(AssemblyPlugin)
